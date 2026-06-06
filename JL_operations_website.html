@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AM Operations – Systems. Processes. Growth.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal: #2E3138;
+    --dark-brown: #4A3428;
+    --warm-white: #F7F5F2;
+    --gold: #C5A46D;
+    --gold-light: #D4B882;
+    --cream: #EDE9E3;
+    --text-muted: #7A6E65;
+    --border: rgba(197,164,109,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--warm-white);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: rgba(247,245,242,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 600;
+    color: var(--dark-brown);
+    letter-spacing: 0.04em;
+  }
+  .logo span {
+    display: block;
+    font-size: 0.55rem; font-weight: 400;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); font-family: 'Jost', sans-serif;
+    margin-top: -2px;
+  }
+  .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--charcoal);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ─── BUTTONS ─── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--dark-brown); color: #fff;
+    padding: 0.85rem 2rem; font-size: 0.72rem;
+    font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    border: none; cursor: pointer; text-decoration: none;
+    transition: background 0.25s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--charcoal); transform: translateY(-1px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: transparent; color: var(--charcoal);
+    padding: 0.85rem 2rem; font-size: 0.72rem;
+    font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1.5px solid var(--charcoal); cursor: pointer; text-decoration: none;
+    transition: all 0.25s;
+  }
+  .btn-outline:hover { background: var(--charcoal); color: #fff; }
+  .btn-gold {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--gold); color: #fff;
+    padding: 0.85rem 2.2rem; font-size: 0.72rem;
+    font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    border: none; cursor: pointer; text-decoration: none;
+    transition: background 0.25s, transform 0.2s;
+  }
+  .btn-gold:hover { background: var(--dark-brown); transform: translateY(-1px); }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 6rem 5%; }
+  .section-label {
+    display: block; font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600; color: var(--charcoal);
+    line-height: 1.15;
+  }
+  .gold-line {
+    width: 48px; height: 2px; background: var(--gold);
+    margin: 1.2rem 0;
+  }
+  .gold-line.center { margin: 1.2rem auto; }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    padding-top: 90px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--warm-white);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 5rem 5% 5rem 8%;
+    position: relative; z-index: 2;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .hero-tag::before {
+    content: ''; width: 24px; height: 1px; background: var(--gold);
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+    font-weight: 600; line-height: 1.12;
+    color: var(--charcoal);
+    margin-bottom: 1.6rem;
+  }
+  .hero-h1 em {
+    font-style: italic; color: var(--gold);
+  }
+  .hero-sub {
+    font-size: 0.93rem; line-height: 1.8;
+    color: var(--text-muted); max-width: 440px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .hero-right {
+    position: relative;
+    background: var(--cream);
+    display: flex; align-items: flex-end; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-img-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, var(--cream) 0%, #E0D8CE 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem;
+    position: relative;
+  }
+  .hero-img-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C5A46D' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Floating service pills on hero */
+  .hero-pills {
+    position: absolute; right: 2.5rem; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 0.6rem;
+    z-index: 3;
+  }
+  .pill {
+    display: flex; align-items: center; gap: 0.7rem;
+    background: var(--charcoal); color: #fff;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.06em;
+    box-shadow: 0 4px 20px rgba(46,49,56,0.2);
+    animation: fadeSlide 0.6s both;
+  }
+  .pill:nth-child(1) { animation-delay: 0.1s; }
+  .pill:nth-child(2) { animation-delay: 0.25s; }
+  .pill:nth-child(3) { animation-delay: 0.4s; }
+  .pill:nth-child(4) { animation-delay: 0.55s; }
+  .pill-icon { color: var(--gold); font-size: 1rem; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Hero person silhouette */
+  .hero-person {
+    width: 100%; height: 100%;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 0;
+  }
+  .hero-person svg { width: 80%; max-width: 420px; }
+
+  /* Stats bar */
+  .stats-bar {
+    background: var(--charcoal);
+    padding: 2.5rem 8%;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+  }
+  .stat {
+    padding: 0 2rem;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 600;
+    color: var(--gold);
+  }
+  .stat-label {
+    font-size: 0.7rem; font-weight: 400;
+    letter-spacing: 0.08em; color: rgba(255,255,255,0.6);
+    margin-top: 0.3rem;
+  }
+
+  /* ─── WHO I AM ─── */
+  #about {
+    background: var(--warm-white);
+    display: grid; grid-template-columns: 0.9fr 1.1fr;
+    gap: 5rem; align-items: center;
+  }
+  .about-img-wrap {
+    position: relative;
+    aspect-ratio: 4/5;
+    background: var(--cream);
+    overflow: hidden;
+  }
+  .about-img-wrap::after {
+    content: '';
+    position: absolute; bottom: -16px; right: -16px;
+    width: 75%; height: 75%;
+    border: 2px solid var(--gold);
+    pointer-events: none; z-index: 0;
+  }
+  .about-img-inner {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--cream) 0%, #D6CEC4 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem; color: var(--text-muted);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-style: italic;
+  }
+  .note-words {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0.3rem;
+  }
+  .note-words span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 600;
+    color: var(--dark-brown); letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
+
+  .about-content { padding-right: 2rem; }
+  .about-text {
+    font-size: 0.93rem; line-height: 1.9;
+    color: var(--text-muted); margin-bottom: 1.2rem;
+  }
+  .about-kpis {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.2rem; margin-top: 2.5rem;
+  }
+  .kpi {
+    padding: 1.2rem; border: 1px solid var(--border);
+    background: var(--cream);
+  }
+  .kpi-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 600; color: var(--gold);
+  }
+  .kpi-text {
+    font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.06em; color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+
+  /* ─── SERVICES ─── */
+  #services {
+    background: var(--charcoal);
+    text-align: center;
+  }
+  #services .section-title { color: var(--warm-white); }
+  #services .section-label { color: var(--gold); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; margin-top: 3.5rem;
+    background: rgba(255,255,255,0.08);
+  }
+  .service-card {
+    background: var(--charcoal);
+    padding: 2.5rem 1.8rem;
+    text-align: left;
+    border-top: 3px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+    cursor: pointer;
+  }
+  .service-card:hover {
+    border-top-color: var(--gold);
+    background: rgba(255,255,255,0.04);
+  }
+  .service-icon {
+    width: 48px; height: 48px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    transition: background 0.3s;
+  }
+  .service-card:hover .service-icon {
+    background: var(--gold); color: #fff;
+  }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600;
+    color: var(--warm-white); margin-bottom: 0.8rem;
+  }
+  .service-desc {
+    font-size: 0.8rem; line-height: 1.75;
+    color: rgba(247,245,242,0.55);
+  }
+  .learn-more {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 1.5rem;
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold);
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .learn-more:hover { gap: 0.8rem; }
+
+  /* ─── EXPERIENCE ─── */
+  #experience {
+    background: var(--warm-white);
+  }
+  .experience-header { text-align: center; margin-bottom: 4rem; }
+  .timeline {
+    display: grid; grid-template-columns: 1fr 60px 1fr;
+    gap: 0; position: relative;
+  }
+  .timeline-center {
+    display: flex; flex-direction: column;
+    align-items: center; position: relative;
+  }
+  .timeline-line {
+    width: 1px; background: var(--border);
+    flex: 1;
+  }
+  .timeline-dot {
+    width: 14px; height: 14px;
+    background: var(--gold); border-radius: 50%;
+    margin: 1rem 0;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px var(--warm-white), 0 0 0 5px var(--gold);
+  }
+  .exp-card {
+    background: var(--cream);
+    padding: 2.5rem;
+    border-top: 3px solid var(--gold);
+    align-self: start;
+  }
+  .exp-card.right { margin-top: 8rem; }
+  .exp-year {
+    font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .exp-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 600;
+    color: var(--charcoal); margin-bottom: 1.2rem;
+  }
+  .exp-list {
+    list-style: none; display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .exp-list li {
+    font-size: 0.83rem; line-height: 1.6; color: var(--text-muted);
+    padding-left: 1rem; position: relative;
+  }
+  .exp-list li::before {
+    content: '–'; position: absolute; left: 0; color: var(--gold);
+  }
+  .exp-img {
+    width: 100%; height: 140px;
+    background: linear-gradient(135deg, #3D2B1F 0%, #6B4C35 100%);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.15);
+    font-size: 3rem;
+    overflow: hidden; position: relative;
+  }
+  .exp-img svg { opacity: 0.15; }
+
+  /* ─── CASE STUDIES ─── */
+  #casestudies {
+    background: #F0EDE7;
+  }
+  .cs-header { text-align: center; margin-bottom: 4rem; }
+  .cs-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .cs-card {
+    background: var(--charcoal);
+    padding: 2.5rem;
+    position: relative; overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s;
+  }
+  .cs-card:hover { transform: translateY(-4px); }
+  .cs-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--gold);
+  }
+  .cs-number {
+    position: absolute; top: 1.5rem; right: 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem; font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    line-height: 1; user-select: none;
+  }
+  .cs-icon {
+    width: 48px; height: 48px;
+    background: rgba(197,164,109,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .cs-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600;
+    color: var(--warm-white); margin-bottom: 0.8rem;
+  }
+  .cs-desc {
+    font-size: 0.8rem; line-height: 1.75;
+    color: rgba(247,245,242,0.5); margin-bottom: 1.5rem;
+  }
+  .cs-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .cs-link:hover { gap: 0.8rem; }
+
+  /* ─── TOOLS ─── */
+  #tools {
+    background: var(--warm-white);
+    text-align: center;
+  }
+  .tools-grid {
+    display: flex; flex-wrap: wrap;
+    gap: 1.5rem; justify-content: center;
+    margin-top: 3rem;
+  }
+  .tool-pill {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.8rem 1.6rem;
+    border: 1px solid var(--border);
+    background: var(--cream);
+    font-size: 0.78rem; font-weight: 500;
+    color: var(--charcoal);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .tool-pill:hover {
+    border-color: var(--gold);
+    background: var(--warm-white);
+    color: var(--dark-brown);
+  }
+  .tool-icon {
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+
+  /* Tool brand colors */
+  .tool-excel .tool-icon { color: #217346; }
+  .tool-gsheets .tool-icon { color: #23A566; }
+  .tool-gws .tool-icon { color: #4285F4; }
+  .tool-mso .tool-icon { color: #D83B01; }
+  .tool-canva .tool-icon { color: #7D2AE8; }
+  .tool-notion .tool-icon { color: #000; }
+  .tool-trello .tool-icon { color: #0052CC; }
+  .tool-asana .tool-icon { color: #F06A6A; }
+
+  /* ─── CONTACT ─── */
+  #contact {
+    background: var(--charcoal);
+    display: grid; grid-template-columns: 1.2fr 0.8fr 0.8fr;
+    gap: 4rem; align-items: start;
+  }
+  .contact-left {}
+  .contact-left .section-title { color: var(--warm-white); }
+  .contact-left .section-label { color: var(--gold); }
+  .contact-sub {
+    font-size: 0.87rem; line-height: 1.8;
+    color: rgba(247,245,242,0.55);
+    margin-top: 1rem; margin-bottom: 2rem;
+  }
+  .contact-center, .contact-right {
+    padding-top: 3rem;
+  }
+  .contact-heading {
+    font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 0.8rem;
+    color: rgba(247,245,242,0.7);
+    font-size: 0.85rem; text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-link:hover { color: var(--gold); }
+  .contact-link-icon {
+    width: 34px; height: 34px;
+    border: 1px solid rgba(197,164,109,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  footer {
+    background: #1A1D22;
+    padding: 1.5rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.7rem; color: rgba(255,255,255,0.3);
+    letter-spacing: 0.08em;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 960px) {
+    #hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-right { height: 300px; }
+    .hero-pills { display: none; }
+    .stats-bar { grid-template-columns: repeat(3,1fr); }
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .about-content { padding-right: 0; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .timeline { grid-template-columns: 1fr; }
+    .timeline-center { display: none; }
+    .exp-card.right { margin-top: 0; }
+    .cs-grid { grid-template-columns: 1fr; }
+    #contact { grid-template-columns: 1fr; gap: 2rem; }
+    nav { padding: 1rem 4%; }
+    .nav-links { gap: 1.2rem; }
+  }
+  @media (max-width: 600px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: 1fr; gap: 1rem; padding: 2rem; }
+    .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1rem; }
+    .hero-left { padding: 3rem 4%; }
+    .nav-links { display: none; }
+    .about-kpis { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <span style="font-family:'Jost',sans-serif;font-size:0.55rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);">AM</span>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--dark-brown);letter-spacing:0.06em;line-height:1;">Operations</div>
+    <span>Systems. Processes. Growth.</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#casestudies">Case Studies</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <span class="hero-tag">Business Operations Specialist</span>
+    <h1 class="hero-h1">
+      Helping Small Businesses Build<br>
+      <em>Organized &amp;</em><br>
+      <em>Scalable Operations</em>
+    </h1>
+    <p class="hero-sub">
+      Business Operations Specialist with experience in entrepreneurship, recruitment operations, process improvement, reporting, and workflow optimization.
+    </p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Book a Discovery Call
+      </a>
+      <a href="#experience" class="btn-outline">View My Experience →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-placeholder">
+      <!-- Decorative silhouette background -->
+      <svg width="100%" height="100%" viewBox="0 0 600 700" style="position:absolute;bottom:0;opacity:0.06;" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="300" cy="650" rx="220" ry="60" fill="#4A3428"/>
+        <path d="M220 640 Q300 200 380 640 Z" fill="#4A3428"/>
+        <circle cx="300" cy="150" r="90" fill="#4A3428"/>
+      </svg>
+      <div style="position:relative;z-index:2;text-align:center;padding:3rem;">
+        <div style="width:120px;height:120px;background:var(--gold);opacity:0.12;border-radius:50%;margin:0 auto 1rem;"></div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--dark-brown);font-style:italic;">Your photo here</p>
+        <p style="font-size:0.72rem;color:var(--text-muted);letter-spacing:0.08em;margin-top:0.4rem;">Professional headshot recommended</p>
+      </div>
+    </div>
+    <!-- Floating pills -->
+    <div class="hero-pills">
+      <div class="pill"><span class="pill-icon">⚙</span> Operations Management</div>
+      <div class="pill"><span class="pill-icon">⇄</span> Process Improvement</div>
+      <div class="pill"><span class="pill-icon">👥</span> Recruitment Operations</div>
+      <div class="pill"><span class="pill-icon">📊</span> Data &amp; Reporting</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">3+</div>
+    <div class="stat-label">Years as Business Owner</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">1.75+</div>
+    <div class="stat-label">Years in Recruitment &amp; Operations</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Commitment to Helping Businesses Grow</div>
+  </div>
+</div>
+
+<!-- WHO I AM -->
+<section id="about">
+  <div class="about-img-wrap reveal">
+    <div class="about-img-inner">
+      <div class="note-words">
+        <span>Plan</span>
+        <span>Organize</span>
+        <span>Optimize</span>
+        <span>Grow</span>
+      </div>
+    </div>
+  </div>
+  <div class="about-content reveal reveal-delay-1">
+    <span class="section-label">Who I Am</span>
+    <h2 class="section-title">Business Operations<br>Specialist</h2>
+    <div class="gold-line"></div>
+    <p class="about-text">
+      I am a Business Operations Specialist with experience running my own coffee shop and supporting international healthcare recruitment operations. My expertise includes process improvement, workflow design, reporting systems, recruitment operations, and administrative management.
+    </p>
+    <p class="about-text">
+      From building and managing my own coffee shop during the pandemic to supporting international nurse recruitment and operations in New York, I bring hands-on experience in building systems, improving processes, and keeping operations running smoothly.
+    </p>
+    <div class="about-kpis">
+      <div class="kpi">
+        <div class="kpi-num">3+</div>
+        <div class="kpi-text">Years as Business Owner</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">1.75+</div>
+        <div class="kpi-text">Years in Recruitment &amp; Operations</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">100%</div>
+        <div class="kpi-text">Commitment to client growth</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">∞</div>
+        <div class="kpi-text">Drive to build better systems</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <span class="section-label">How I Can Help</span>
+  <h2 class="section-title" style="color:var(--warm-white);">Services</h2>
+  <div class="gold-line center"></div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">⚙</div>
+      <div class="service-name">Operations Management</div>
+      <p class="service-desc">Helping business owners organize and streamline day-to-day operations to improve efficiency and productivity across every function.</p>
+      <a href="#contact" class="learn-more">Learn More →</a>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-icon">⇄</div>
+      <div class="service-name">Process Improvement</div>
+      <p class="service-desc">Identifying inefficiencies, analyzing workflows, and creating better processes for scalability and sustainable growth.</p>
+      <a href="#contact" class="learn-more">Learn More →</a>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon">👥</div>
+      <div class="service-name">Recruitment Operations</div>
+      <p class="service-desc">Managing candidate pipelines and documentation systems end-to-end, from screening through deployment and coordination.</p>
+      <a href="#contact" class="learn-more">Learn More →</a>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-icon">📊</div>
+      <div class="service-name">Reporting &amp; Analytics</div>
+      <p class="service-desc">Building dashboards and reporting systems that organize your data and provide clear insights for better business decisions.</p>
+      <a href="#contact" class="learn-more">Learn More →</a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="experience-header">
+    <span class="section-label">Career Journey</span>
+    <h2 class="section-title">My Experience</h2>
+    <div class="gold-line center"></div>
+  </div>
+  <div class="timeline">
+    <!-- Left -->
+    <div class="exp-card reveal">
+      <div class="exp-img">☕</div>
+      <div class="exp-year">2021 – 2024</div>
+      <div class="exp-title">Coffee Shop Owner</div>
+      <ul class="exp-list">
+        <li>Built business from scratch — systems, branding, and operations</li>
+        <li>Managed finances, inventory, suppliers, and customer service</li>
+        <li>Led daily operations and team management</li>
+        <li>Generated revenue through customer acquisition strategies</li>
+        <li>Maintained profitability through economic challenges</li>
+      </ul>
+    </div>
+    <!-- Center line -->
+    <div class="timeline-center">
+      <div class="timeline-line"></div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-line"></div>
+    </div>
+    <!-- Right -->
+    <div class="exp-card right reveal reveal-delay-2">
+      <div class="exp-img">💼</div>
+      <div class="exp-year">2024 – Present</div>
+      <div class="exp-title">Recruitment &amp; Operations Assistant</div>
+      <ul class="exp-list">
+        <li>End-to-end recruitment management for EB3 nurses</li>
+        <li>Candidate credential tracking (NCLEX, PTE, visa requirements)</li>
+        <li>Facility placement coordination in New York</li>
+        <li>Streamlined Excel files and created reporting systems</li>
+        <li>Prepared invoices and processed payments</li>
+        <li>Executive reporting and data management</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="casestudies">
+  <div class="cs-header">
+    <span class="section-label">Portfolio</span>
+    <h2 class="section-title">Case Studies</h2>
+    <div class="gold-line center"></div>
+  </div>
+  <div class="cs-grid">
+    <div class="cs-card reveal">
+      <div class="cs-number">01</div>
+      <div class="cs-icon">☕</div>
+      <div class="cs-title">Startup Coffee Shop Operations</div>
+      <p class="cs-desc">Built operational systems from scratch and managed business growth during challenging market conditions — from inventory control to daily financial management.</p>
+      <a href="#contact" class="cs-link">View Case Study →</a>
+    </div>
+    <div class="cs-card reveal reveal-delay-1">
+      <div class="cs-number">02</div>
+      <div class="cs-icon">👥</div>
+      <div class="cs-title">Recruitment Workflow Management</div>
+      <p class="cs-desc">Coordinated candidate movement from screening through deployment — organizing the end-to-end recruitment workflow for EB3 nurses and improving candidate tracking.</p>
+      <a href="#contact" class="cs-link">View Case Study →</a>
+    </div>
+    <div class="cs-card reveal reveal-delay-2">
+      <div class="cs-number">03</div>
+      <div class="cs-icon">📊</div>
+      <div class="cs-title">Reporting System Improvement</div>
+      <p class="cs-desc">Redesigned and streamlined Excel files to improve data accuracy and reporting — organizing data and reporting processes to improve operational visibility and decision-making.</p>
+      <a href="#contact" class="cs-link">View Case Study →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <span class="section-label">Tech Stack</span>
+  <h2 class="section-title">Tools I Use</h2>
+  <div class="gold-line center"></div>
+  <div class="tools-grid">
+    <div class="tool-pill tool-excel">
+      <div class="tool-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M21.17 3H7.83C6.82 3 6 3.82 6 4.83V7H3.83C2.82 7 2 7.82 2 8.83v10.34C2 20.18 2.82 21 3.83 21h13.34C18.18 21 19 20.18 19 19.17V17h2.17C22.18 17 23 16.18 23 15.17V4.83C23 3.82 22.18 3 21.17 3zM7 19.17V17h9.17C17.18 17 18 16.18 18 15.17V9h1.17C19.63 9 20 9.37 20 9.83v5.34c0 .46-.37.83-.83.83H7zm3.85-5.76L9.5 11h1.44l.91 2.04L12.82 11H14.2l-1.85 3.41L14.28 18h-1.43l-1.01-2.23L10.79 18H9.35l2-3.59z"/></svg>
+      </div>
+      Microsoft Excel
+    </div>
+    <div class="tool-pill tool-gsheets">
+      <div class="tool-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11 0l-11 2v20l11 2V0zm1 5h5.5L18 7v10l-1.5 2H12V5zm1.5 3v8H16V8h-3.5z"/></svg>
+      </div>
+      Google Sheets
+    </div>
+    <div class="tool-pill tool-gws">
+      <div class="tool-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      </div>
+      Google Workspace
+    </div>
+    <div class="tool-pill tool-mso">
+      <div class="tool-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h18v18H3z"/><path fill="white" d="M7 7h4v4H7zm6 0h4v4h-4zM7 13h4v4H7zm6 0h4v4h-4z"/></svg>
+      </div>
+      Microsoft Office
+    </div>
+    <div class="tool-pill tool-canva">
+      <div class="tool-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><text x="7" y="16" fill="white" font-size="10" font-family="serif" font-weight="bold">C</text></svg>
+      </div>
+      Canva
+    </div>
+    <div class="tool-pill tool-notion">
+      <div class="tool-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h16c.55 0 1 .45 1 1v16c0 .55-.45 1-1 1H4c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1zm2 4v10h12V7H6zm2 2h8v2H8V9zm0 4h6v2H8v-2z"/></svg>
+      </div>
+      Notion
+    </div>
+    <div class="tool-pill tool-trello">
+      <div class="tool-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM10 17H7V7h3v10zm7-5h-3V7h3v5z"/></svg>
+      </div>
+      Trello
+    </div>
+    <div class="tool-pill tool-asana">
+      <div class="tool-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/></svg>
+      </div>
+      Asana
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-left reveal">
+    <span class="section-label">Get In Touch</span>
+    <h2 class="section-title" style="color:var(--warm-white);">Let's Build Better<br>Systems for Your<br>Business</h2>
+    <div class="gold-line"></div>
+    <p class="contact-sub">
+      Book a free discovery call and let's talk about how I can help you streamline operations and grow. No pressure. Just a friendly conversation.
+    </p>
+    <a href="mailto:youremail@email.com" class="btn-gold">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Book a Discovery Call
+    </a>
+    <p style="font-size:0.7rem;color:rgba(247,245,242,0.3);margin-top:1rem;">No pressure. Just a friendly conversation.</p>
+  </div>
+
+  <div class="contact-center reveal reveal-delay-1">
+    <div class="contact-heading">Let's Connect</div>
+    <div class="contact-links">
+      <a href="mailto:youremail@email.com" class="contact-link">
+        <div class="contact-link-icon">✉</div>
+        youremail@email.com
+      </a>
+      <a href="#" class="contact-link">
+        <div class="contact-link-icon">📍</div>
+        Philippines (Open to Global Clients)
+      </a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-link">
+        <div class="contact-link-icon">in</div>
+        linkedin.com/in/yourprofile
+      </a>
+    </div>
+  </div>
+
+  <div class="contact-right reveal reveal-delay-2">
+    <div class="contact-heading">Schedule a Call</div>
+    <div class="contact-links">
+      <a href="#" class="contact-link">
+        <div class="contact-link-icon">📅</div>
+        Book via Calendly
+      </a>
+      <a href="#" class="contact-link">
+        <div class="contact-link-icon">💼</div>
+        View LinkedIn Profile
+      </a>
+    </div>
+    <div style="margin-top:2.5rem;padding:1.5rem;border:1px solid rgba(197,164,109,0.15);background:rgba(255,255,255,0.03);">
+      <p style="font-size:0.72rem;color:rgba(247,245,242,0.4);line-height:1.7;">
+        Available for project-based work, part-time support, or ongoing operations management. Let's find the right fit for your business.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 AM Operations. All rights reserved.</span>
+  <span>Systems. Processes. <a href="#hero">Growth.</a></span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Smooth nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold)' : '';
+    });
+  });
+</script>
+</body>
+</html>
