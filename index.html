@@ -453,7 +453,8 @@
       <div class="testimonial-area" id="testimonials">
         <h2>What Leadership Says</h2>
 
-        <blockquote class="testimonial-card" data-testimonial="1">
+<div class="testimonial-slider">
+        <blockquote class="testimonial-card" >
           <div class="quote-mark" aria-hidden="true">&ldquo;</div>
           <p class="testimonial-text">Jonathan automated our sponsorship trackers so the numbers update on their own. Before, I had to manually tally everything, which left room for errors. Now I can see exactly how many sponsorships are in each stage at a glance. It's made my decision-making so much faster because I'm working from real-time data instead of an outdated spreadsheet.</p>
           <footer class="testimonial-author">
@@ -465,7 +466,7 @@
           </footer>
         </blockquote>
 
-        <blockquote class="testimonial-card" data-testimonial="2" style="display:none;">
+        <blockquote class="testimonial-card"  style="display:none;">
           <div class="quote-mark" aria-hidden="true">&ldquo;</div>
           <p class="testimonial-text">Before Jonathan, information was tracked across multiple sources and folders, causing delays and making it hard to monitor case progress. He built structured processes that improved organization, accountability, and visibility. And that let me make decisions faster and with more confidence, because the information I needed was always reliable and available.</p>
           <footer class="testimonial-author">
@@ -477,7 +478,7 @@
           </footer>
         </blockquote>
 
-        <blockquote class="testimonial-card" data-testimonial="3" style="display:none;">
+        <blockquote class="testimonial-card" >
           <div class="quote-mark" aria-hidden="true">&ldquo;</div>
           <p class="testimonial-text">Jonathan was my right hand for contacting applicants, collecting documents, and scheduling interviews. His proactiveness made the early steps of the application process fast and painless for both applicants and the team. I didn't need to oversee it, which freed me up for more urgent, complex work. He's fast, creative, requires minimal supervision, and works just as well independently as he does on a team.</p>
           <footer class="testimonial-author">
@@ -489,33 +490,8 @@
           </footer>
         </blockquote>
 
-        <div class="testimonial-dots" role="tablist" aria-label="Testimonial selector">
-          <button type="button" class="dot active" role="tab" aria-selected="true" aria-label="Testimonial 1 of 3" data-target="1"></button>
-          <button type="button" class="dot" role="tab" aria-selected="false" aria-label="Testimonial 2 of 3" data-target="2"></button>
-          <button type="button" class="dot" role="tab" aria-selected="false" aria-label="Testimonial 3 of 3" data-target="3"></button>
-        </div>
       </div>
     </section>
-
-    <script>
-      (function () {
-        var dots = document.querySelectorAll('#testimonials .dot');
-        var cards = document.querySelectorAll('#testimonials .testimonial-card');
-        dots.forEach(function (dot) {
-          dot.addEventListener('click', function () {
-            var target = dot.getAttribute('data-target');
-            cards.forEach(function (card) {
-              card.style.display = (card.getAttribute('data-testimonial') === target) ? '' : 'none';
-            });
-            dots.forEach(function (d) {
-              var active = d === dot;
-              d.classList.toggle('active', active);
-              d.setAttribute('aria-selected', active ? 'true' : 'false');
-            });
-          });
-        });
-      })();
-    </script>
 
     <!-- ============ EXPERIENCE ============ -->
     <section class="experience reveal" aria-labelledby="experience-heading">
@@ -792,3 +768,4 @@
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
+

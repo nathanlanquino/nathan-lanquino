@@ -242,4 +242,28 @@
   var yearEl = document.getElementById('current-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+const slider = document.querySelector(".testimonial-slider");
+
+if (slider) {
+  setInterval(() => {
+    const cardWidth = slider.clientWidth;
+
+    if (
+      slider.scrollLeft + cardWidth >=
+      slider.scrollWidth - 10
+    ) {
+      slider.scrollTo({
+        left: 0,
+        behavior: "smooth",
+      });
+    } else {
+      slider.scrollBy({
+        left: cardWidth,
+        behavior: "smooth",
+      });
+    }
+  }, 5000);
+}
+
 })();
+
