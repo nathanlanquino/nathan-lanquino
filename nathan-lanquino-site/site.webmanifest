@@ -1,0 +1,22 @@
+{
+  "name": "Nathan Lanquino | Operations & Systems Specialist",
+  "short_name": "N. Lanquino",
+  "description": "Operations & Systems Specialist helping founders improve visibility, reporting, workflows, and operational efficiency through scalable systems and documented processes.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0F0F0F",
+  "theme_color": "#0F0F0F",
+  "icons": [
+    {
+      "src": "assets/img/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
