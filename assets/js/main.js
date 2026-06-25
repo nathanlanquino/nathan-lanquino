@@ -206,20 +206,35 @@
         submitBtn.textContent = 'Sending…';
       }
 
-      // NOTE: This form currently has no backend wired up.
-      // Replace this block with a real submission, e.g.:
-      //   fetch('https://formspree.io/f/YOUR_FORM_ID', { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
-      // or swap the <form> action/method for a service like Formspree, Netlify Forms, or Getform.
-      window.setTimeout(function () {
-        if (statusEl) {
-          statusEl.textContent = "Thanks — this form isn't connected to an inbox yet. Please email nathan@yourdomain.com directly, or use the Calendly link above.";
-          statusEl.className = 'form-status success';
-        }
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalLabel;
-        }
-      }, 600);
+     fetch("https://formspree.io/f/mqevpenr", {
+  method: "POST",
+  body: new FormData(form),
+  headers: {
+    Accept: "application/json"
+  }
+})
+.then(function(response) {
+  if (response.ok) {
+    statusEl.textContent =
+      "Thank you! Your message has been sent successfully. I will get back to you within one business day.";
+
+    statusEl.className = "form-status success";
+
+    form.reset();
+  } else {
+    throw new Error("Submission failed");
+  }
+})
+.catch(function() {
+  statusEl.textContent =
+    "Something went wrong. Please email me directly at lanquinojonathan@gmail.com.";
+
+  statusEl.className = "form-status error";
+})
+.finally(function() {
+  submitBtn.disabled = false;
+  submitBtn.textContent = originalLabel;
+});
     });
   }
 
